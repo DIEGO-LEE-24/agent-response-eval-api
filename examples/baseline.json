@@ -1,0 +1,21 @@
+{
+  "evaluator_version": "grounding-rules-v2+resolution-rules-v2",
+  "hallucination_correct": 20,
+  "hallucination_total": 32,
+  "resolution_correct": 20,
+  "resolution_total": 20,
+  "known_mismatches": [
+    "G-08",
+    "G-09",
+    "G-10",
+    "G-11",
+    "G-12",
+    "G-13",
+    "G-14",
+    "G-15",
+    "G-25",
+    "G-27",
+    "G-28",
+    "G-29"
+  ]
+}

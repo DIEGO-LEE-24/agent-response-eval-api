@@ -1,0 +1,1070 @@
+{
+  "dataset_name": "synthetic-support-v2",
+  "hallucination_cases": [
+    {
+      "input": {
+        "case_id": "G-01",
+        "answer": "Your order A-1042 shipped on 2026-03-04.",
+        "evidence": [
+          {
+            "source_id": "orders:A-1042",
+            "key": "order_status",
+            "value": "shipped"
+          },
+          {
+            "source_id": "orders:A-1042",
+            "key": "shipped_date",
+            "value": "2026-03-04"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "shipped",
+            "cited_source_ids": [
+              "orders:A-1042"
+            ]
+          },
+          {
+            "key": "shipped_date",
+            "value": "2026-03-04",
+            "cited_source_ids": [
+              "orders:A-1042"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "exact_match",
+      "note": "Two claims, both cited to the order record."
+    },
+    {
+      "input": {
+        "case_id": "G-02",
+        "answer": "A refund of 42.50 EUR has been approved.",
+        "evidence": [
+          {
+            "source_id": "refunds:R-77",
+            "key": "refund_amount",
+            "value": "42.50 EUR"
+          },
+          {
+            "source_id": "refunds:R-77",
+            "key": "refund_status",
+            "value": "approved"
+          }
+        ],
+        "claims": [
+          {
+            "key": "refund_amount",
+            "value": "42.50 EUR",
+            "cited_source_ids": [
+              "refunds:R-77"
+            ]
+          },
+          {
+            "key": "refund_status",
+            "value": "approved",
+            "cited_source_ids": [
+              "refunds:R-77"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "exact_match",
+      "note": "Amount written in the same format as the record."
+    },
+    {
+      "input": {
+        "case_id": "G-03",
+        "answer": "The Pro plan includes 5 seats.",
+        "evidence": [
+          {
+            "source_id": "kb:plans",
+            "key": "pro_seat_limit",
+            "value": "5"
+          }
+        ],
+        "claims": [
+          {
+            "key": "pro_seat_limit",
+            "value": "5",
+            "cited_source_ids": []
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "exact_match",
+      "note": "Single source, no citation supplied; citations are optional."
+    },
+    {
+      "input": {
+        "case_id": "G-04",
+        "answer": "Your order is packed and your invoice INV-3301 is paid.",
+        "evidence": [
+          {
+            "source_id": "orders:B-2210",
+            "key": "order_status",
+            "value": "packed"
+          },
+          {
+            "source_id": "billing:INV-3301",
+            "key": "invoice_status",
+            "value": "paid"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "packed",
+            "cited_source_ids": [
+              "orders:B-2210"
+            ]
+          },
+          {
+            "key": "invoice_status",
+            "value": "paid",
+            "cited_source_ids": [
+              "billing:INV-3301"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "exact_match",
+      "note": "Claims drawn from two different sources, each cited correctly."
+    },
+    {
+      "input": {
+        "case_id": "G-05",
+        "answer": "Status: SHIPPED.",
+        "evidence": [
+          {
+            "source_id": "orders:A-1042",
+            "key": "order_status",
+            "value": "shipped"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "SHIPPED.",
+            "cited_source_ids": [
+              "orders:A-1042"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "normalization",
+      "note": "Upper case and trailing period."
+    },
+    {
+      "input": {
+        "case_id": "G-06",
+        "answer": "Delivery is expected next  business   day.",
+        "evidence": [
+          {
+            "source_id": "orders:C-5150",
+            "key": "delivery window",
+            "value": "next business day"
+          }
+        ],
+        "claims": [
+          {
+            "key": "Delivery Window",
+            "value": "next  business   day",
+            "cited_source_ids": [
+              "orders:C-5150"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "normalization",
+      "note": "Key casing and repeated inner whitespace."
+    },
+    {
+      "input": {
+        "case_id": "G-07",
+        "answer": "Your account email is verified.",
+        "evidence": [
+          {
+            "source_id": "accounts:U-88",
+            "key": "email_verified",
+            "value": "true"
+          }
+        ],
+        "claims": [
+          {
+            "key": "Email_Verified",
+            "value": "\"true\"",
+            "cited_source_ids": [
+              "accounts:U-88"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "normalization",
+      "note": "Quoted value and differently cased key."
+    },
+    {
+      "input": {
+        "case_id": "G-08",
+        "answer": "Your parcel was dispatched yesterday.",
+        "evidence": [
+          {
+            "source_id": "orders:A-1042",
+            "key": "order_status",
+            "value": "shipped"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "dispatched",
+            "cited_source_ids": [
+              "orders:A-1042"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "synonym",
+      "note": "dispatched and shipped mean the same thing here."
+    },
+    {
+      "input": {
+        "case_id": "G-09",
+        "answer": "Your subscription has been cancelled.",
+        "evidence": [
+          {
+            "source_id": "subs:S-19",
+            "key": "subscription_status",
+            "value": "canceled"
+          }
+        ],
+        "claims": [
+          {
+            "key": "subscription_status",
+            "value": "cancelled",
+            "cited_source_ids": [
+              "subs:S-19"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "spelling_variant",
+      "note": "British vs American spelling."
+    },
+    {
+      "input": {
+        "case_id": "G-10",
+        "answer": "We refunded $10.00 to your card.",
+        "evidence": [
+          {
+            "source_id": "refunds:R-81",
+            "key": "refund_amount",
+            "value": "10 USD"
+          }
+        ],
+        "claims": [
+          {
+            "key": "refund_amount",
+            "value": "$10.00",
+            "cited_source_ids": [
+              "refunds:R-81"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "amount_format",
+      "note": "Same amount, different currency notation."
+    },
+    {
+      "input": {
+        "case_id": "G-11",
+        "answer": "The cancellation fee is 1,200 KRW.",
+        "evidence": [
+          {
+            "source_id": "kb:fees",
+            "key": "cancellation_fee",
+            "value": "1200 KRW"
+          }
+        ],
+        "claims": [
+          {
+            "key": "cancellation_fee",
+            "value": "1,200 KRW",
+            "cited_source_ids": [
+              "kb:fees"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "amount_format",
+      "note": "Thousands separator only."
+    },
+    {
+      "input": {
+        "case_id": "G-12",
+        "answer": "Your package will arrive on March 5, 2026.",
+        "evidence": [
+          {
+            "source_id": "orders:D-0305",
+            "key": "delivery_date",
+            "value": "2026-03-05"
+          }
+        ],
+        "claims": [
+          {
+            "key": "delivery_date",
+            "value": "March 5, 2026",
+            "cited_source_ids": [
+              "orders:D-0305"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "date_format",
+      "note": "Same date, long-form vs ISO."
+    },
+    {
+      "input": {
+        "case_id": "G-13",
+        "answer": "Refunds are processed within 3 business days.",
+        "evidence": [
+          {
+            "source_id": "kb:refund-policy",
+            "key": "processing_days",
+            "value": "3"
+          }
+        ],
+        "claims": [
+          {
+            "key": "processing_days",
+            "value": "3 business days",
+            "cited_source_ids": [
+              "kb:refund-policy"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "unit_suffix",
+      "note": "Unit suffix present in the claim but not in the record."
+    },
+    {
+      "input": {
+        "case_id": "G-14",
+        "answer": "주문하신 상품은 배송완료 상태입니다.",
+        "evidence": [
+          {
+            "source_id": "orders:K-7001",
+            "key": "order_status",
+            "value": "배송 완료"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "배송완료",
+            "cited_source_ids": [
+              "orders:K-7001"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "korean_spacing",
+      "note": "Korean compound written with and without a space."
+    },
+    {
+      "input": {
+        "case_id": "G-15",
+        "answer": "Estimated delivery is 2026-03-09.",
+        "evidence": [
+          {
+            "source_id": "orders:E-0909",
+            "key": "estimated_delivery",
+            "value": "2026-03-09"
+          }
+        ],
+        "claims": [
+          {
+            "key": "eta",
+            "value": "2026-03-09",
+            "cited_source_ids": [
+              "orders:E-0909"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "grounded",
+      "category": "key_alias",
+      "note": "Caller used a different key name for the same field."
+    },
+    {
+      "input": {
+        "case_id": "G-16",
+        "answer": "We refunded 15 USD to your card.",
+        "evidence": [
+          {
+            "source_id": "refunds:R-81",
+            "key": "refund_amount",
+            "value": "10 USD"
+          }
+        ],
+        "claims": [
+          {
+            "key": "refund_amount",
+            "value": "15 USD",
+            "cited_source_ids": [
+              "refunds:R-81"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "value_mismatch",
+      "note": "Wrong amount in the same format."
+    },
+    {
+      "input": {
+        "case_id": "G-17",
+        "answer": "Your package will arrive on 2026-03-07.",
+        "evidence": [
+          {
+            "source_id": "orders:D-0305",
+            "key": "delivery_date",
+            "value": "2026-03-05"
+          }
+        ],
+        "claims": [
+          {
+            "key": "delivery_date",
+            "value": "2026-03-07",
+            "cited_source_ids": [
+              "orders:D-0305"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "value_mismatch",
+      "note": "Wrong date in the same format."
+    },
+    {
+      "input": {
+        "case_id": "G-18",
+        "answer": "Good news, this order is eligible for a refund.",
+        "evidence": [
+          {
+            "source_id": "kb:refund-policy",
+            "key": "refund_eligible",
+            "value": "no"
+          }
+        ],
+        "claims": [
+          {
+            "key": "refund_eligible",
+            "value": "yes",
+            "cited_source_ids": [
+              "kb:refund-policy"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "negation",
+      "note": "Claim contradicts the policy record."
+    },
+    {
+      "input": {
+        "case_id": "G-19",
+        "answer": "Your order shipped and shipping was free.",
+        "evidence": [
+          {
+            "source_id": "orders:A-1042",
+            "key": "order_status",
+            "value": "shipped"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "shipped",
+            "cited_source_ids": [
+              "orders:A-1042"
+            ]
+          },
+          {
+            "key": "shipping_fee",
+            "value": "0",
+            "cited_source_ids": []
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "missing_evidence",
+      "note": "Second claim has no evidence at all."
+    },
+    {
+      "input": {
+        "case_id": "G-20",
+        "answer": "Your warranty covers water damage.",
+        "evidence": [],
+        "claims": [
+          {
+            "key": "warranty_covers_water_damage",
+            "value": "yes",
+            "cited_source_ids": []
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "missing_evidence",
+      "note": "No evidence was retrieved."
+    },
+    {
+      "input": {
+        "case_id": "G-21",
+        "answer": "Your order shipped.",
+        "evidence": [
+          {
+            "source_id": "orders:A-1042",
+            "key": "order_status",
+            "value": "shipped"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "shipped",
+            "cited_source_ids": [
+              "kb:999"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "unknown_source",
+      "note": "Value is right but the citation points at a source that was not supplied."
+    },
+    {
+      "input": {
+        "case_id": "G-22",
+        "answer": "Your invoice is paid.",
+        "evidence": [
+          {
+            "source_id": "billing:INV-3301",
+            "key": "invoice_status",
+            "value": "paid"
+          },
+          {
+            "source_id": "orders:B-2210",
+            "key": "order_status",
+            "value": "packed"
+          }
+        ],
+        "claims": [
+          {
+            "key": "invoice_status",
+            "value": "paid",
+            "cited_source_ids": [
+              "orders:B-2210"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "citation_mismatch",
+      "note": "Value exists, but the cited source does not say it."
+    },
+    {
+      "input": {
+        "case_id": "G-23",
+        "answer": "Your refund of 10 USD was approved and will arrive tomorrow.",
+        "evidence": [
+          {
+            "source_id": "refunds:R-81",
+            "key": "refund_amount",
+            "value": "10 USD"
+          },
+          {
+            "source_id": "refunds:R-81",
+            "key": "refund_status",
+            "value": "pending"
+          }
+        ],
+        "claims": [
+          {
+            "key": "refund_amount",
+            "value": "10 USD",
+            "cited_source_ids": [
+              "refunds:R-81"
+            ]
+          },
+          {
+            "key": "refund_status",
+            "value": "approved",
+            "cited_source_ids": [
+              "refunds:R-81"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "partial_support",
+      "note": "One claim is right, the other contradicts the record."
+    },
+    {
+      "input": {
+        "case_id": "G-24",
+        "answer": "Your package will arrive on 2026-03-05.",
+        "evidence": [
+          {
+            "source_id": "orders:D-0305",
+            "key": "delivery_date",
+            "value": "2026-03-05"
+          },
+          {
+            "source_id": "carrier:TRK-55",
+            "key": "delivery_date",
+            "value": "2026-03-06"
+          }
+        ],
+        "claims": [
+          {
+            "key": "delivery_date",
+            "value": "2026-03-05",
+            "cited_source_ids": []
+          }
+        ]
+      },
+      "expected_verdict": "needs_review",
+      "category": "conflicting_evidence",
+      "note": "Order system and carrier disagree; no citation."
+    },
+    {
+      "input": {
+        "case_id": "G-25",
+        "answer": "Your package will arrive on 2026-03-05.",
+        "evidence": [
+          {
+            "source_id": "orders:D-0305",
+            "key": "delivery_date",
+            "value": "2026-03-05"
+          },
+          {
+            "source_id": "carrier:TRK-55",
+            "key": "delivery_date",
+            "value": "2026-03-06"
+          }
+        ],
+        "claims": [
+          {
+            "key": "delivery_date",
+            "value": "2026-03-05",
+            "cited_source_ids": [
+              "orders:D-0305"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "needs_review",
+      "category": "conflicting_evidence",
+      "note": "Citing one side of a conflict does not settle which source is current."
+    },
+    {
+      "input": {
+        "case_id": "G-26",
+        "answer": "Your package will arrive on 2026-03-08.",
+        "evidence": [
+          {
+            "source_id": "orders:D-0305",
+            "key": "delivery_date",
+            "value": "2026-03-05"
+          },
+          {
+            "source_id": "carrier:TRK-55",
+            "key": "delivery_date",
+            "value": "2026-03-06"
+          }
+        ],
+        "claims": [
+          {
+            "key": "delivery_date",
+            "value": "2026-03-08",
+            "cited_source_ids": []
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "conflicting_evidence",
+      "note": "Sources disagree, and the claim matches neither."
+    },
+    {
+      "input": {
+        "case_id": "G-27",
+        "answer": "Your order shipped. A full refund will be issued tomorrow.",
+        "evidence": [
+          {
+            "source_id": "orders:A-1042",
+            "key": "order_status",
+            "value": "shipped"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "shipped",
+            "cited_source_ids": [
+              "orders:A-1042"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "answer_text_gap",
+      "note": "Refund promise is in the text but was never extracted as a claim."
+    },
+    {
+      "input": {
+        "case_id": "G-28",
+        "answer": "Your plan renews on 2026-04-01, and we have waived the late fee.",
+        "evidence": [
+          {
+            "source_id": "subs:S-19",
+            "key": "renewal_date",
+            "value": "2026-04-01"
+          }
+        ],
+        "claims": [
+          {
+            "key": "renewal_date",
+            "value": "2026-04-01",
+            "cited_source_ids": [
+              "subs:S-19"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "answer_text_gap",
+      "note": "Fee waiver is unsupported and not extracted."
+    },
+    {
+      "input": {
+        "case_id": "G-29",
+        "answer": "A refund of 25 USD has been approved.",
+        "evidence": [
+          {
+            "source_id": "refunds:R-90",
+            "key": "refund_amount",
+            "value": "20 USD"
+          }
+        ],
+        "claims": [
+          {
+            "key": "refund_amount",
+            "value": "20 USD",
+            "cited_source_ids": [
+              "refunds:R-90"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "unsupported",
+      "category": "extraction_error",
+      "note": "Caller extracted the evidence value instead of what the answer says."
+    },
+    {
+      "input": {
+        "case_id": "G-30",
+        "answer": "",
+        "evidence": [
+          {
+            "source_id": "orders:A-1042",
+            "key": "order_status",
+            "value": "shipped"
+          }
+        ],
+        "claims": [
+          {
+            "key": "order_status",
+            "value": "shipped",
+            "cited_source_ids": [
+              "orders:A-1042"
+            ]
+          }
+        ]
+      },
+      "expected_verdict": "needs_review",
+      "category": "empty_answer",
+      "note": "Claims check out but there is no answer text to send."
+    },
+    {
+      "input": {
+        "case_id": "G-31",
+        "answer": "   ",
+        "evidence": [],
+        "claims": []
+      },
+      "expected_verdict": "needs_review",
+      "category": "empty_answer",
+      "note": "Whitespace-only answer and nothing to verify."
+    },
+    {
+      "input": {
+        "case_id": "G-32",
+        "answer": "I've checked your account and everything looks fine.",
+        "evidence": [
+          {
+            "source_id": "accounts:U-88",
+            "key": "account_status",
+            "value": "active"
+          }
+        ],
+        "claims": []
+      },
+      "expected_verdict": "needs_review",
+      "category": "no_claims",
+      "note": "Answer makes an assertion but no claims were supplied."
+    }
+  ],
+  "resolution_cases": [
+    {
+      "input": {
+        "case_id": "S-01",
+        "customer_confirmed": true,
+        "requires_action": false,
+        "tool_action_status": "not_required"
+      },
+      "expected_status": "resolved",
+      "category": "resolved",
+      "note": "Informational question, customer confirms."
+    },
+    {
+      "input": {
+        "case_id": "S-02",
+        "customer_confirmed": true,
+        "requires_action": true,
+        "tool_action_status": "succeeded"
+      },
+      "expected_status": "resolved",
+      "category": "resolved",
+      "note": "Refund executed and customer confirms."
+    },
+    {
+      "input": {
+        "case_id": "S-03",
+        "customer_confirmed": true,
+        "requires_action": false,
+        "tool_action_status": "succeeded"
+      },
+      "expected_status": "resolved",
+      "category": "resolved",
+      "note": "Optional action succeeded on a case that needed none."
+    },
+    {
+      "input": {
+        "case_id": "S-04",
+        "customer_confirmed": null,
+        "requires_action": false,
+        "tool_action_status": "not_required"
+      },
+      "expected_status": "unknown",
+      "category": "no_confirmation",
+      "note": "Answer given, customer left without a reply."
+    },
+    {
+      "input": {
+        "case_id": "S-05",
+        "customer_confirmed": null,
+        "requires_action": true,
+        "tool_action_status": "succeeded"
+      },
+      "expected_status": "unknown",
+      "category": "no_confirmation",
+      "note": "Action succeeded but the customer never confirmed."
+    },
+    {
+      "input": {
+        "case_id": "S-06",
+        "customer_confirmed": false,
+        "requires_action": true,
+        "tool_action_status": "succeeded"
+      },
+      "expected_status": "unresolved",
+      "category": "customer_rejected",
+      "note": "Action succeeded, customer says it did not help."
+    },
+    {
+      "input": {
+        "case_id": "S-07",
+        "customer_confirmed": false,
+        "requires_action": false,
+        "tool_action_status": "not_required"
+      },
+      "expected_status": "unresolved",
+      "category": "customer_rejected",
+      "note": "Customer rejects an informational answer."
+    },
+    {
+      "input": {
+        "case_id": "S-08",
+        "customer_confirmed": false,
+        "requires_action": true,
+        "tool_action_status": "pending"
+      },
+      "expected_status": "unresolved",
+      "category": "customer_rejected",
+      "note": "Rejection takes precedence over a pending action."
+    },
+    {
+      "input": {
+        "case_id": "S-09",
+        "customer_confirmed": true,
+        "requires_action": true,
+        "tool_action_status": "failed"
+      },
+      "expected_status": "unresolved",
+      "category": "action_failed",
+      "note": "Customer thanks the agent, but the refund call failed."
+    },
+    {
+      "input": {
+        "case_id": "S-10",
+        "customer_confirmed": null,
+        "requires_action": true,
+        "tool_action_status": "failed"
+      },
+      "expected_status": "unresolved",
+      "category": "action_failed",
+      "note": "Failed action, no customer reply."
+    },
+    {
+      "input": {
+        "case_id": "S-11",
+        "customer_confirmed": true,
+        "requires_action": true,
+        "tool_action_status": "pending"
+      },
+      "expected_status": "unknown",
+      "category": "action_unverified",
+      "note": "Action still pending when the customer confirmed."
+    },
+    {
+      "input": {
+        "case_id": "S-12",
+        "customer_confirmed": true,
+        "requires_action": true,
+        "tool_action_status": "not_attempted"
+      },
+      "expected_status": "unknown",
+      "category": "action_unverified",
+      "note": "Agent promised the action but never attempted it."
+    },
+    {
+      "input": {
+        "case_id": "S-13",
+        "customer_confirmed": true,
+        "requires_action": true,
+        "tool_action_status": "not_required"
+      },
+      "expected_status": "unknown",
+      "category": "inconsistent_signal",
+      "note": "Action required but reported as not required."
+    },
+    {
+      "input": {
+        "case_id": "S-14",
+        "customer_confirmed": true,
+        "requires_action": false,
+        "tool_action_status": "failed"
+      },
+      "expected_status": "unknown",
+      "category": "inconsistent_signal",
+      "note": "No action required, yet an action failed."
+    },
+    {
+      "input": {
+        "case_id": "S-15",
+        "customer_confirmed": true,
+        "requires_action": false,
+        "tool_action_status": "pending"
+      },
+      "expected_status": "unknown",
+      "category": "inconsistent_signal",
+      "note": "No action required, yet an action is pending."
+    },
+    {
+      "input": {
+        "case_id": "S-16",
+        "customer_confirmed": true,
+        "requires_action": false,
+        "tool_action_status": "not_required",
+        "handed_off": true
+      },
+      "expected_status": "handoff",
+      "category": "handoff",
+      "note": "Handed off even though the customer said thanks."
+    },
+    {
+      "input": {
+        "case_id": "S-17",
+        "customer_confirmed": null,
+        "requires_action": true,
+        "tool_action_status": "failed",
+        "handed_off": true
+      },
+      "expected_status": "handoff",
+      "category": "handoff",
+      "note": "Handed off after a failed action."
+    },
+    {
+      "input": {
+        "case_id": "S-18",
+        "customer_confirmed": false,
+        "requires_action": false,
+        "tool_action_status": "not_required",
+        "handed_off": true
+      },
+      "expected_status": "handoff",
+      "category": "handoff",
+      "note": "Handed off after the customer rejected the answer."
+    },
+    {
+      "input": {
+        "case_id": "S-19",
+        "customer_confirmed": true,
+        "requires_action": false,
+        "tool_action_status": "not_required",
+        "customer_goal_present": false
+      },
+      "expected_status": "unknown",
+      "category": "goal_unspecified",
+      "note": "Greeting only; there was nothing to resolve."
+    },
+    {
+      "input": {
+        "case_id": "S-20",
+        "customer_confirmed": null,
+        "requires_action": false,
+        "tool_action_status": "not_required",
+        "customer_goal_present": false,
+        "handed_off": true
+      },
+      "expected_status": "handoff",
+      "category": "goal_unspecified",
+      "note": "No goal stated, but the conversation was handed off."
+    }
+  ]
+}
