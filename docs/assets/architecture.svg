@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="712" viewBox="0 0 1200 712" role="img" aria-labelledby="t d">
+  <title id="t">agent-response-eval-api request flow</title>
+  <desc id="d">Caller sends structured JSON to FastAPI. Pydantic validates it, then rules-based grounding, resolution or dataset evaluation runs. An optional LLM judge exists for grounding. The same evaluation runs offline in CI against a recorded baseline.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#57606a"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1f2328; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+      .h { font-size: 15.5px; font-weight: 600; }
+      .b { font-size: 13.5px; fill: #424a53; }
+      .s { font-size: 12.5px; fill: #57606a; }
+      .p { font-size: 13px; fill: #0550ae; }
+      .pill { font-size: 12.5px; font-weight: 600; }
+      .box { fill: #f6f8fa; stroke: #d0d7de; stroke-width: 1.2; }
+      .opt { fill: #ffffff; stroke: #8c959f; stroke-width: 1.2; stroke-dasharray: 6 4; }
+      .ln { stroke: #57606a; stroke-width: 1.6; fill: none; }
+      .dl { stroke: #8c959f; stroke-width: 1.6; fill: none; stroke-dasharray: 6 4; }
+    </style>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="1199" height="711" rx="12" fill="#ffffff" stroke="#d0d7de"/>
+
+  <text x="32" y="44" style="font-size:22px;font-weight:700">Request flow</text>
+  <text x="32" y="70" class="b">Only what is implemented in app/. Solid: default rules mode, no network. Dashed: optional LLM judge (mocked tests only).</text>
+
+  <!-- Caller -->
+  <rect class="box" x="32" y="104" width="200" height="410" rx="8"/>
+  <text x="48" y="132" class="h">Caller</text>
+  <text x="48" y="160" class="b">extracts claims from the</text>
+  <text x="48" y="179" class="b">agent answer itself</text>
+  <text x="48" y="198" class="s">(this API does not)</text>
+  <text x="48" y="234" class="b">sends JSON:</text>
+  <text x="48" y="256" class="mono s">answer</text>
+  <text x="48" y="276" class="mono s">evidence[]</text>
+  <text x="62" y="295" class="mono s">source_id, key, value</text>
+  <text x="48" y="315" class="mono s">claims[]</text>
+  <text x="62" y="334" class="mono s">key, value,</text>
+  <text x="62" y="353" class="mono s">cited_source_ids</text>
+  <text x="48" y="389" class="b">or structured</text>
+  <text x="48" y="408" class="b">resolution signals</text>
+  <text x="48" y="440" class="b">or a labeled dataset</text>
+
+  <path class="ln" d="M232 309 H258" marker-end="url(#a)"/>
+
+  <!-- FastAPI -->
+  <rect class="box" x="262" y="104" width="190" height="410" rx="8"/>
+  <text x="278" y="132" class="h">FastAPI</text>
+  <text x="278" y="154" class="mono s">app/main.py</text>
+  <text x="278" y="192" class="b">Pydantic v2 models</text>
+  <text x="278" y="212" class="mono s">app/schemas.py</text>
+  <text x="278" y="248" class="b">unknown fields → 422</text>
+  <text x="278" y="268" class="b">malformed body → 422</text>
+  <text x="278" y="304" class="mono s">GET /health</text>
+  <text x="278" y="324" class="s">liveness + version</text>
+
+  <path class="ln" d="M452 170 H488" marker-end="url(#a)"/>
+  <path class="dl" d="M452 279 H488" marker-end="url(#a)"/>
+  <path class="ln" d="M452 374 H488" marker-end="url(#a)"/>
+  <path class="ln" d="M452 474 H488" marker-end="url(#a)"/>
+
+  <!-- Grounding rules -->
+  <rect class="box" x="492" y="110" width="350" height="120" rx="8"/>
+  <text x="508" y="135" class="mono p">POST /v1/hallucinations/check</text>
+  <text x="508" y="160" class="h">Grounding rules <tspan class="mono s" dx="6">app/rules.py</tspan></text>
+  <text x="508" y="184" class="b">each supplied claim vs evidence value</text>
+  <text x="508" y="203" class="b">and cited source IDs, exact match</text>
+  <text x="508" y="222" class="s">after case/space/edge-punctuation normalize()</text>
+
+  <!-- Optional LLM judge -->
+  <rect class="opt" x="492" y="244" width="350" height="70" rx="8"/>
+  <text x="508" y="266" class="mono s">mode: "llm"</text>
+  <text x="826" y="266" class="s" text-anchor="end">mocked tests only</text>
+  <text x="508" y="287" class="h">Optional LLM judge <tspan class="mono s" dx="6">app/llm.py</tspan></text>
+  <text x="508" y="305" class="s">OpenAI-compatible endpoint from env · unset → 503</text>
+
+  <!-- Resolution rules -->
+  <rect class="box" x="492" y="328" width="350" height="92" rx="8"/>
+  <text x="508" y="353" class="mono p">POST /v1/resolution/check</text>
+  <text x="508" y="378" class="h">Resolution rules <tspan class="mono s" dx="6">app/rules.py</tspan></text>
+  <text x="508" y="402" class="b">hand-off › goal › rejected › action › confirmed</text>
+
+  <!-- Evaluation -->
+  <rect class="box" x="492" y="434" width="350" height="80" rx="8"/>
+  <text x="508" y="459" class="mono p">POST /v1/evaluations/run</text>
+  <text x="508" y="484" class="h">Dataset evaluation <tspan class="mono s" dx="6">app/evaluation.py</tspan></text>
+  <text x="508" y="504" class="s">rules only · mode=llm cases → 422</text>
+
+  <path class="ln" d="M842 170 H878" marker-end="url(#a)"/>
+  <path class="dl" d="M842 279 H878" marker-end="url(#a)"/>
+  <path class="ln" d="M842 374 H878" marker-end="url(#a)"/>
+  <path class="ln" d="M842 474 H878" marker-end="url(#a)"/>
+
+  <!-- Grounding output -->
+  <rect class="box" x="882" y="110" width="286" height="120" rx="8"/>
+  <text x="898" y="135" class="h">verdict + violations[]</text>
+  <rect x="898" y="146" width="80" height="24" rx="12" fill="#dafbe1" stroke="#1a7f37"/>
+  <text x="938" y="163" class="pill" text-anchor="middle" style="fill:#1a7f37">grounded</text>
+  <rect x="986" y="146" width="100" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+  <text x="1036" y="163" class="pill" text-anchor="middle" style="fill:#cf222e">unsupported</text>
+  <rect x="898" y="176" width="110" height="24" rx="12" fill="#fff8c5" stroke="#9a6700"/>
+  <text x="953" y="193" class="pill" text-anchor="middle" style="fill:#9a6700">needs_review</text>
+  <text x="898" y="220" class="mono s">answer_text_assessed: false</text>
+
+  <!-- LLM output -->
+  <rect class="opt" x="882" y="244" width="286" height="70" rx="8"/>
+  <text x="898" y="266" class="b">any failure → needs_review</text>
+  <text x="898" y="286" class="mono s">JUDGE_UNAVAILABLE</text>
+  <text x="898" y="304" class="mono s">JUDGE_INVALID_OUTPUT</text>
+
+  <!-- Resolution output -->
+  <rect class="box" x="882" y="328" width="286" height="92" rx="8"/>
+  <text x="898" y="352" class="h">status + reason_code</text>
+  <rect x="898" y="362" width="74" height="22" rx="11" fill="#dafbe1" stroke="#1a7f37"/>
+  <text x="935" y="378" class="pill" text-anchor="middle" style="fill:#1a7f37">resolved</text>
+  <rect x="980" y="362" width="88" height="22" rx="11" fill="#ffebe9" stroke="#cf222e"/>
+  <text x="1024" y="378" class="pill" text-anchor="middle" style="fill:#cf222e">unresolved</text>
+  <rect x="1076" y="362" width="72" height="22" rx="11" fill="#ddf4ff" stroke="#0969da"/>
+  <text x="1112" y="378" class="pill" text-anchor="middle" style="fill:#0969da">handoff</text>
+  <rect x="898" y="390" width="76" height="22" rx="11" fill="#fff8c5" stroke="#9a6700"/>
+  <text x="936" y="406" class="pill" text-anchor="middle" style="fill:#9a6700">unknown</text>
+
+  <!-- Evaluation output -->
+  <rect class="box" x="882" y="434" width="286" height="80" rx="8"/>
+  <text x="898" y="459" class="h">metrics</text>
+  <text x="898" y="482" class="b">accuracy · confusion matrix</text>
+  <text x="898" y="501" class="b">mismatches[] with category</text>
+
+  <!-- Offline regression lane -->
+  <rect x="32" y="540" width="1136" height="148" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="48" y="566" class="h">Offline regression check</text>
+  <text x="232" y="566" class="s">GitHub Actions on every push / PR: ruff check · ruff format --check · pytest · baseline check</text>
+
+  <rect class="box" x="48" y="582" width="266" height="88" rx="8"/>
+  <text x="64" y="606" class="mono p">examples/dataset.json</text>
+  <text x="64" y="630" class="b">32 grounding + 20 resolution</text>
+  <text x="64" y="650" class="s">hand-written synthetic cases</text>
+
+  <path class="ln" d="M314 626 H350" marker-end="url(#a)"/>
+
+  <rect class="box" x="354" y="582" width="266" height="88" rx="8"/>
+  <text x="370" y="606" class="mono p">scripts/run_eval.py</text>
+  <text x="370" y="630" class="b">calls evaluate() offline</text>
+  <text x="370" y="650" class="mono s">--check-baseline</text>
+
+  <path class="ln" d="M620 626 H656" marker-end="url(#a)"/>
+
+  <rect class="box" x="660" y="582" width="266" height="88" rx="8"/>
+  <text x="676" y="606" class="mono p">examples/baseline.json</text>
+  <text x="676" y="630" class="b">20/32 · 20/20 · 12 mismatch IDs</text>
+  <text x="676" y="650" class="s">recorded known results</text>
+
+  <path class="ln" d="M926 626 H962" marker-end="url(#a)"/>
+
+  <rect class="box" x="966" y="582" width="186" height="88" rx="8"/>
+  <text x="982" y="606" class="h">exit 1 on drift</text>
+  <text x="982" y="630" class="b">any changed case</text>
+  <text x="982" y="650" class="s">fails, even a fix</text>
+</svg>

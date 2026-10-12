@@ -2,12 +2,26 @@
 
 Structured claim-evidence consistency check and conversation resolution classification API for AI support agents, with a regression evaluation over a labeled synthetic dataset.
 
+[![ci](https://github.com/DIEGO-LEE-24/agent-response-eval-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DIEGO-LEE-24/agent-response-eval-api/actions/workflows/ci.yml)
+
 - Python 3.11+, FastAPI, Pydantic v2, pytest, Ruff, GitHub Actions
 - Rules mode runs offline: no network access, model or API key needed
 
 > **Scope of this repository.** This is a standalone technical sample prepared for the Sendbird AI Agent Engineer Intern application. It is new code that runs on hand-written synthetic data. It does not contain, reproduce or port code or data from any team project (ANCLA, SafeLedger or others), and its results say nothing about those projects.
 
-## What it does and does not do
+## Architecture
+
+![Request flow: caller → FastAPI and Pydantic validation → grounding rules, optional LLM judge, resolution rules or dataset evaluation → verdicts and metrics; offline regression check in CI](docs/assets/architecture.svg)
+
+The diagram shows only what exists in `app/`. There is no claim extraction, vector store, conversation storage or streaming in this service.
+
+## Running example
+
+<img src="docs/assets/swagger-grounding-demo.png" width="760" alt="Swagger UI at /docs after executing POST /v1/hallucinations/check with evidence 10 USD and claim 15 USD; server response 200 with verdict unsupported, VALUE_MISMATCH and CITATION_MISMATCH">
+
+Screenshot of the Swagger UI (`/docs`) served by `uvicorn app.main:app` on a local machine, after executing the `demo-2` request shown under [API examples](#api-examples): evidence says `10 USD`, the claim says `15 USD`, and the server returns `unsupported` with `VALUE_MISMATCH`.
+
+## Endpoints
 
 | Endpoint | Input | What is checked | Not checked |
 |---|---|---|---|
@@ -29,7 +43,7 @@ The rules evaluator reads `answer` only to check whether it is empty. Every grou
 | `CONFLICTING_EVIDENCE` | sources disagree and the claim cites none of the matching ones | `needs_review` |
 | `EMPTY_ANSWER`, `NO_EXTRACTED_CLAIMS` | nothing that can be verified | `needs_review` |
 
-`grounded` is returned only when no code fires. Values are compared after case, whitespace and edge-punctuation normalization only, so `$10.00` vs `10 USD` or `dispatched` vs `shipped` are reported as mismatches. This is deliberate; see the known gaps below.
+`grounded` is returned only when no code fires. Values are compared after case, whitespace and edge-punctuation normalization only, so `$10.00` vs `10 USD` or `dispatched` vs `shipped` are reported as mismatches. This is deliberate; see [Design choices and known limits](#design-choices-and-known-limits).
 
 ### Resolution policy (in priority order)
 
@@ -50,24 +64,7 @@ The rules evaluator reads `answer` only to check whether it is empty. Every grou
 
 Only mocked tests exist for this path (`httpx.MockTransport`). **No accuracy is claimed for any real model.**
 
-## Run
-
-```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
-python -m pip install -e ".[dev]"
-
-uvicorn app.main:app --reload    # http://127.0.0.1:8000/docs
-```
-
-Docker:
-
-```bash
-docker build -t agent-response-eval-api .
-docker run --rm -p 8000:8000 agent-response-eval-api
-```
-
-## API examples
+### API examples
 
 The responses below were captured from the running service.
 
@@ -136,26 +133,11 @@ curl -s http://127.0.0.1:8000/v1/evaluations/run -H "Content-Type: application/j
 
 Returns per-task accuracy, a confusion matrix and the list of mismatched case IDs with their category.
 
-## Tests
-
-```bash
-python -m ruff check .
-python -m ruff format --check .
-python -m pytest
-python scripts/run_eval.py --check-baseline
-```
-
-| File | Tests | Covers |
-|---|---|---|
-| `tests/test_rules.py` | 34 | normalization, every grounding code, verdict precedence, resolution policy order, known-gap guards |
-| `tests/test_api.py` | 15 | response contract, 422 on malformed payloads, 503 when the judge is not configured, dataset/baseline consistency |
-| `tests/test_llm.py` | 12 | judge request shape, `JUDGE_UNAVAILABLE` vs `JUDGE_INVALID_OUTPUT` (mocked transport only) |
-
-**61 tests pass.** Passing tests means the code behaves as specified, including the documented gaps. It is a different measure from the evaluation accuracy below.
-
 ## Evaluation results
 
-Dataset: `examples/dataset.json` (`synthetic-support-v2`). All cases are hand-written synthetic examples, not production conversations. Labels record what a reviewer would decide; they were written before running the evaluator and were not adjusted afterwards.
+![Grounding evaluation on synthetic-support-v2: 20 of 32 agree with label; confusion matrix; 8 supported answers rejected and 4 wrongly passed, listed by case ID and category](docs/assets/grounding-eval.svg)
+
+Dataset: `examples/dataset.json` (`synthetic-support-v2`). All cases are hand-written synthetic examples, not production conversations. Labels record what a reviewer would decide; they were written before running the evaluator and were not adjusted afterwards. The chart is generated from the same evaluation by `python scripts/make_eval_chart.py`.
 
 | Task | Cases | Agree with label | Mismatches |
 |---|---|---|---|
@@ -172,6 +154,7 @@ Grounding confusion matrix (rows = expected, columns = actual):
 
 - These figures measure the rules on this synthetic set only. They are **not** a hallucination-detection accuracy for real agent traffic.
 - Resolution labels were written from the policy above, so 20/20 shows that the implementation follows that policy. It does not show that the policy is correct for real conversations.
+- The 61 passing tests and the 20/32 agreement are different measures: tests check that the code behaves as specified, the evaluation checks how often the rules agree with a reviewer's label.
 
 ### The 12 grounding mismatches (kept in `examples/baseline.json`)
 
@@ -183,16 +166,56 @@ Grounding confusion matrix (rows = expected, columns = actual):
 
 `scripts/run_eval.py --check-baseline` fails if any of these cases changes or any other case breaks, so an improvement has to update the baseline explicitly.
 
-## Limitations
+## Run locally
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
+python -m pip install -e ".[dev]"
+
+uvicorn app.main:app --reload    # http://127.0.0.1:8000/docs
+```
+
+Docker:
+
+```bash
+docker build -t agent-response-eval-api .
+docker run --rm -p 8000:8000 agent-response-eval-api
+```
+
+## Tests
+
+```bash
+python -m ruff check .
+python -m ruff format --check .
+python -m pytest
+python scripts/run_eval.py --check-baseline
+```
+
+| File | Tests | Covers |
+|---|---|---|
+| `tests/test_rules.py` | 34 | normalization, every grounding code, verdict precedence, resolution policy order, known-gap guards |
+| `tests/test_api.py` | 15 | response contract, 422 on malformed payloads, 503 when the judge is not configured, dataset/baseline consistency |
+| `tests/test_llm.py` | 12 | judge request shape, `JUDGE_UNAVAILABLE` vs `JUDGE_INVALID_OUTPUT` (mocked transport only) |
+
+**61 tests pass.** Passing tests means the code behaves as specified, including the documented gaps. It is a different measure from the evaluation accuracy above.
+
+`.github/workflows/ci.yml` runs on every push and pull request with Python 3.12: install, `ruff check`, `ruff format --check`, `pytest`, and the baseline check. The badge at the top links to the run history.
+
+## Design choices and known limits
+
+Design choices, in order of importance (also in the `app/rules.py` docstring):
+
+1. **Fail closed.** Anything the rules cannot verify becomes `needs_review` or `unsupported`; `grounded` is only returned when every supplied claim matches supplied evidence.
+2. **Explicit scope.** The grounding evaluator compares structured claims with structured evidence. It does not read the natural-language answer, so it cannot catch statements that were never extracted as claims. That gap is covered by a regression test and the `answer_text_assessed: false` field instead of being hidden.
+3. **Conservative string comparison over fuzzy matching.** Synonyms, currency formats and unit suffixes are reported as mismatches; the dataset records them as known false positives rather than tuning them away.
+
+Known limits:
 
 - Only caller-supplied structured claims are verified; claim extraction is out of scope.
 - No semantic matching: synonyms, number/date formats and key aliases produce false `unsupported`.
 - The dataset is small and synthetic; no real conversation data was used.
 - The LLM judge path is tested with mocked responses only.
-
-## CI
-
-`.github/workflows/ci.yml` runs on every push and pull request with Python 3.12: install, `ruff check`, `ruff format --check`, `pytest`, and the baseline check.
 
 ## Layout
 
@@ -205,8 +228,9 @@ app/
   main.py        FastAPI routes
 prompts/         versioned judge prompt
 examples/        synthetic dataset and recorded baseline
-scripts/         offline evaluation and baseline check
+scripts/         offline evaluation, baseline check, chart rendering
 tests/           rules, API contract, mocked LLM judge
+docs/assets/     architecture diagram, Swagger UI screenshot, evaluation chart
 ```
 
 ## License

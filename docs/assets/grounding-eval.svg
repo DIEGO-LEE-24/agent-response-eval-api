@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="536" viewBox="0 0 1200 536" role="img" aria-labelledby="t">
+<title id="t">Grounding evaluation: 20 of 32 synthetic cases agree with the label</title>
+<defs><style>text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1f2328; } .mono { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; } .h { font-size: 15.5px; font-weight: 600; } .b { font-size: 13.5px; fill: #424a53; } .s { font-size: 12.5px; fill: #57606a; }</style></defs>
+<rect x="0.5" y="0.5" width="1199" height="535" rx="12" fill="#ffffff" stroke="#d0d7de"/>
+<text x="32" y="44" class="h" text-anchor="start" style="font-size:22px;font-weight:700">Grounding evaluation · synthetic-support-v2</text>
+<text x="32" y="72" class="b" text-anchor="start" style="font-size:16px;fill:#1f2328">20 / 32 agree with label (62.5%)  ·  8 supported answers rejected  ·  4 wrongly passed</text>
+<text x="364.0" y="112" class="s" text-anchor="middle">actual verdict →</text>
+<text x="182" y="138" class="s" text-anchor="end">expected ↓</text>
+<text x="252.0" y="138" class="mono s" text-anchor="middle">grounded</text>
+<text x="364.0" y="138" class="mono s" text-anchor="middle">unsupported</text>
+<text x="476.0" y="138" class="mono s" text-anchor="middle">needs_review</text>
+<text x="182" y="188.0" class="mono s" text-anchor="end">grounded (15)</text>
+<rect x="199" y="153" width="106" height="60" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+<text x="252.0" y="191.0" class="h" text-anchor="middle" style="font-size:22px;fill:#1a7f37">7</text>
+<rect x="311" y="153" width="106" height="60" rx="6" fill="#ffebe9" stroke="#cf222e"/>
+<text x="364.0" y="191.0" class="h" text-anchor="middle" style="font-size:22px;fill:#cf222e">8</text>
+<rect x="423" y="153" width="106" height="60" rx="6" fill="#f6f8fa" stroke="#d0d7de"/>
+<text x="476.0" y="191.0" class="h" text-anchor="middle" style="font-size:22px;fill:#8c959f">0</text>
+<text x="182" y="254.0" class="mono s" text-anchor="end">unsupported (12)</text>
+<rect x="199" y="219" width="106" height="60" rx="6" fill="#fff8c5" stroke="#9a6700"/>
+<text x="252.0" y="257.0" class="h" text-anchor="middle" style="font-size:22px;fill:#9a6700">3</text>
+<rect x="311" y="219" width="106" height="60" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+<text x="364.0" y="257.0" class="h" text-anchor="middle" style="font-size:22px;fill:#1a7f37">9</text>
+<rect x="423" y="219" width="106" height="60" rx="6" fill="#f6f8fa" stroke="#d0d7de"/>
+<text x="476.0" y="257.0" class="h" text-anchor="middle" style="font-size:22px;fill:#8c959f">0</text>
+<text x="182" y="320.0" class="mono s" text-anchor="end">needs_review (5)</text>
+<rect x="199" y="285" width="106" height="60" rx="6" fill="#fff8c5" stroke="#9a6700"/>
+<text x="252.0" y="323.0" class="h" text-anchor="middle" style="font-size:22px;fill:#9a6700">1</text>
+<rect x="311" y="285" width="106" height="60" rx="6" fill="#f6f8fa" stroke="#d0d7de"/>
+<text x="364.0" y="323.0" class="h" text-anchor="middle" style="font-size:22px;fill:#8c959f">0</text>
+<rect x="423" y="285" width="106" height="60" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+<text x="476.0" y="323.0" class="h" text-anchor="middle" style="font-size:22px;fill:#1a7f37">4</text>
+<rect x="40" y="366" width="14" height="14" rx="3" fill="#dafbe1" stroke="#1a7f37"/>
+<text x="60" y="378" class="s" text-anchor="start">agrees</text>
+<rect x="150" y="366" width="14" height="14" rx="3" fill="#ffebe9" stroke="#cf222e"/>
+<text x="170" y="378" class="s" text-anchor="start">rejected a supported answer</text>
+<rect x="380" y="366" width="14" height="14" rx="3" fill="#fff8c5" stroke="#9a6700"/>
+<text x="400" y="378" class="s" text-anchor="start">passed as grounded</text>
+<rect x="584" y="100" width="584" height="320" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<text x="600" y="128" class="h" text-anchor="start" style="fill:#cf222e">Supported answer flagged unsupported · 8</text>
+<text x="600" y="148" class="s" text-anchor="start">values and keys are compared as strings after light normalization</text>
+<rect x="600" y="160" width="100" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="649.8" y="176.5" class="s" text-anchor="middle" style="fill:#cf222e">G-08 synonym</text>
+<rect x="707.6" y="160" width="156" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="785.75" y="176.5" class="s" text-anchor="middle" style="fill:#cf222e">G-09 spelling_variant</text>
+<rect x="871.9" y="160" width="137" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="940.5999999999999" y="176.5" class="s" text-anchor="middle" style="fill:#cf222e">G-10 amount_format</text>
+<rect x="600" y="192" width="137" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="668.7" y="208.5" class="s" text-anchor="middle" style="fill:#cf222e">G-11 amount_format</text>
+<rect x="745.4" y="192" width="125" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="807.8" y="208.5" class="s" text-anchor="middle" style="fill:#cf222e">G-12 date_format</text>
+<rect x="878.2" y="192" width="125" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="940.6" y="208.5" class="s" text-anchor="middle" style="fill:#cf222e">G-13 unit_suffix</text>
+<rect x="600" y="224" width="144" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="671.85" y="240.5" class="s" text-anchor="middle" style="fill:#cf222e">G-14 korean_spacing</text>
+<rect x="751.7" y="224" width="112" height="24" rx="12" fill="#ffebe9" stroke="#cf222e"/>
+<text x="807.8000000000001" y="240.5" class="s" text-anchor="middle" style="fill:#cf222e">G-15 key_alias</text>
+<text x="600" y="284" class="h" text-anchor="start" style="fill:#9a6700">Unsupported or conflicting answer passed as grounded · 4</text>
+<text x="600" y="304" class="s" text-anchor="start">answer text is not assessed; caller-extracted claims are trusted</text>
+<rect x="600" y="316" width="182" height="24" rx="12" fill="#fff8c5" stroke="#9a6700"/>
+<text x="690.75" y="332.5" class="s" text-anchor="middle" style="fill:#9a6700">G-25 conflicting_evidence</text>
+<rect x="789.5" y="316" width="150" height="24" rx="12" fill="#fff8c5" stroke="#9a6700"/>
+<text x="864.5" y="332.5" class="s" text-anchor="middle" style="fill:#9a6700">G-27 answer_text_gap</text>
+<rect x="947.5" y="316" width="150" height="24" rx="12" fill="#fff8c5" stroke="#9a6700"/>
+<text x="1022.5" y="332.5" class="s" text-anchor="middle" style="fill:#9a6700">G-28 answer_text_gap</text>
+<rect x="600" y="348" width="156" height="24" rx="12" fill="#fff8c5" stroke="#9a6700"/>
+<text x="678.15" y="364.5" class="s" text-anchor="middle" style="fill:#9a6700">G-29 extraction_error</text>
+<text x="600" y="402" class="s" text-anchor="start">All mismatch IDs are pinned in examples/baseline.json.</text>
+<text x="32" y="464" class="b" text-anchor="start">32 hand-written synthetic cases. These numbers describe the rules on this set only; they are not hallucination-detection accuracy on real agent traffic.</text>
+<text x="32" y="486" class="b" text-anchor="start">Resolution: 20 / 20 synthetic policy scenarios agree. Labels follow the documented policy, so this is not a real-conversation resolution rate.</text>
+<text x="32" y="512" class="s" text-anchor="start">Generated by scripts/make_eval_chart.py from examples/dataset.json.</text>
+</svg>
