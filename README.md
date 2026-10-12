@@ -9,6 +9,8 @@ Structured claim-evidence consistency check and conversation resolution classifi
 
 > **Scope of this repository.** This is a standalone technical sample prepared for the Sendbird AI Agent Engineer Intern application. It is new code that runs on hand-written synthetic data. It does not contain, reproduce or port code or data from any team project (ANCLA, SafeLedger or others), and its results say nothing about those projects.
 
+**My contribution:** Defined API requirements, validation policies, and evaluation criteria; reviewed implementation, tests, and evaluation results. Code was developed with AI coding assistance.
+
 ## Architecture
 
 ![Request flow: caller → FastAPI and Pydantic validation → grounding rules, optional LLM judge, resolution rules or dataset evaluation → verdicts and metrics; offline regression check in CI](docs/assets/architecture.svg)
